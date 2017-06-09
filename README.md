@@ -9,5 +9,5 @@
 ### 注册中心服务端导向数据结构图
 ![](https://github.com/njyjz/cross-monitor/raw/master/readme-elements/zookeeper服务端导向数据结构图.png)
 ### 注册中心客户端导向数据结构图
-![](https://github.com/njyjz/cross-monitor/raw/master/readme-elements/zookeeper客户端导向数据结构图.png)
+![](https://github.com/njyjz/cross-monitor/raw/master/readme-elements/zookeeper客户端导向数据结构.png)
 ## 系统界面
