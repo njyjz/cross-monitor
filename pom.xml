@@ -6,7 +6,7 @@
 	<groupId>com.yjz.cross</groupId>
 	<artifactId>cross-monitor</artifactId>
 	<version>1.0.0</version>
-	<packaging>pom</packaging>
+	<packaging>jar</packaging>
 
 	<dependencyManagement>
 		<dependencies>
