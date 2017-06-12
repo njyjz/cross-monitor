@@ -2,7 +2,7 @@ package com.yjz.cross.monitor.pojo;
 
 public enum ServiceNodeStatus
 {
-    VALID("active"),INVALID("inactive");
+    VALID("active"),INVALID("inactive"),UNKNONW("unknown");
     
     private String status;
     

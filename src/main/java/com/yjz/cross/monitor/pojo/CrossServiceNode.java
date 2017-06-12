@@ -8,7 +8,20 @@ public class CrossServiceNode
     
     private String serviceName;
     
-    private List<CrossReferenceNode> nodeList;
+    private String status = ServiceNodeStatus.UNKNONW.status();
+    
+    private List<CrossReferenceNode> referenceNodeList;
+    
+    public CrossServiceNode()
+    {
+        
+    }
+    
+    public CrossServiceNode(String serviceName, String address)
+    {
+        this.serviceName = serviceName;
+        this.address = address;
+    }
 
     public String getAddress()
     {
@@ -30,14 +43,24 @@ public class CrossServiceNode
         this.serviceName = serviceName;
     }
 
-    public List<CrossReferenceNode> getNodeList()
+    public List<CrossReferenceNode> getReferenceNodeList()
     {
-        return nodeList;
+        return referenceNodeList;
     }
 
-    public void setNodeList(List<CrossReferenceNode> nodeList)
+    public void setReferenceNodeList(List<CrossReferenceNode> nodeList)
     {
-        this.nodeList = nodeList;
+        this.referenceNodeList = nodeList;
+    }
+
+    public String getStatus()
+    {
+        return status;
+    }
+
+    public void setStatus(String status)
+    {
+        this.status = status;
     }
 
 }
