@@ -2,9 +2,16 @@ package com.yjz.cross.monitor.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.atomic.AtomicBoolean;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import com.yjz.cross.codec.RpcDecoder;
+import com.yjz.cross.codec.RpcEncoder;
+import com.yjz.cross.codec.RpcResponse;
 import com.yjz.cross.monitor.pojo.AccessLog;
 import com.yjz.cross.monitor.pojo.CrossReference;
 import com.yjz.cross.monitor.pojo.CrossReferenceNode;
@@ -12,13 +19,26 @@ import com.yjz.cross.monitor.pojo.CrossService;
 import com.yjz.cross.monitor.pojo.CrossServiceNode;
 import com.yjz.cross.monitor.pojo.QueryCrossReferenceReq;
 import com.yjz.cross.monitor.pojo.QueryCrossServiceReq;
+import com.yjz.cross.monitor.pojo.ServiceNodeStatus;
 import com.yjz.cross.monitor.registry.Registry;
 import com.yjz.cross.monitor.registry.RegistryFactory;
+
+import io.netty.bootstrap.Bootstrap;
+import io.netty.channel.ChannelFuture;
+import io.netty.channel.ChannelFutureListener;
+import io.netty.channel.ChannelInitializer;
+import io.netty.channel.ChannelOption;
+import io.netty.channel.ChannelPipeline;
+import io.netty.channel.EventLoopGroup;
+import io.netty.channel.nio.NioEventLoopGroup;
+import io.netty.channel.socket.SocketChannel;
+import io.netty.channel.socket.nio.NioSocketChannel;
+import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 
 /**
  * 
  * @ClassName CrossServiceManageImpl
- * @Description TODO(这里用一句话描述这个类的作用)
+ * @Description 
  * @author biw
  * @Date Jun 12, 2017 9:16:39 AM
  * @version 1.0.0
@@ -26,7 +46,8 @@ import com.yjz.cross.monitor.registry.RegistryFactory;
 @Service
 public class CrossManageImpl implements CrossManage
 {
-
+    private static final Logger logger = LoggerFactory.getLogger(CrossManageImpl.class);
+    
     @Override
     public List<CrossService> queryCrossServices(QueryCrossServiceReq req)
     {
@@ -63,7 +84,6 @@ public class CrossManageImpl implements CrossManage
             CrossService crossService = new CrossService();
             crossService.setServiceName(serviceName);   
             crossService.setNodeList(nodeList);
-            
             serviceNodeList.add(crossService);
         }
 
@@ -101,9 +121,6 @@ public class CrossManageImpl implements CrossManage
         
         for(String referName : referNameList)
         {
-            CrossReference crossReference = new CrossReference();
-            
-            
             List<String> referAddrList = registry.queryReferenceNodes(referName);
             List<CrossReferenceNode> referNodeList = convReferenceAddrToNode(referName, referAddrList);
             for(CrossReferenceNode referNode : referNodeList)
@@ -116,6 +133,7 @@ public class CrossManageImpl implements CrossManage
                 }      
             }
             
+            CrossReference crossReference = new CrossReference();
             crossReference.setReferenceNodeList(referNodeList);
             crossReference.setServiceName(referName);
             referenceList.add(crossReference);
@@ -127,8 +145,8 @@ public class CrossManageImpl implements CrossManage
     @Override
     public List<AccessLog> queryAccessRecord(String referenceNode, String serviceNode)
     {
-        // TODO Auto-generated method stub
-        return null;
+        // TODO 
+        return new ArrayList<>();
     }
     
     @Override
@@ -142,8 +160,73 @@ public class CrossManageImpl implements CrossManage
     @Override
     public String detectServiceNodeStatus(String serviceNodeAddr)
     {
-        // TODO Auto-generated method stub
-        return "";
+        CountDownLatch latch = new CountDownLatch(1);
+        AtomicBoolean connected = new AtomicBoolean(false);
+        
+        EventLoopGroup group = new NioEventLoopGroup();
+        try
+        {
+            Bootstrap b = new Bootstrap();
+            b.group(group).channel(NioSocketChannel.class).option(ChannelOption.TCP_NODELAY, true).handler(
+                new ChannelInitializer<SocketChannel>()
+                {
+                    @Override
+                    public void initChannel(SocketChannel ch)
+                        throws Exception
+                    {
+                        ChannelPipeline cp = ch.pipeline();
+                        
+                        cp.addLast(new RpcEncoder());
+                        cp.addLast(new LengthFieldBasedFrameDecoder(Integer.MAX_VALUE, 0, 4, 0, 0));
+                        cp.addLast(new RpcDecoder(RpcResponse.class));
+                        //cp.addLast(new ClientHandler());
+                    }
+                });
+                
+            // Start the client.
+            String[] args = serviceNodeAddr.split(":");
+            System.out.println("'netty connect to " + args[0] + ":" + args[1]);
+            ChannelFuture channelFuture = b.connect(args[0], Integer.parseInt(args[1])).sync();
+            
+            channelFuture.addListener(new ChannelFutureListener()
+            {
+                @Override
+                public void operationComplete(final ChannelFuture channelFuture)
+                    throws Exception
+                {
+                    if (channelFuture.isSuccess())
+                    {
+                        logger.info("Successfully connect to remote server. remote peer = " + serviceNodeAddr);
+                        connected.set(true);
+                    }
+                    else
+                    {
+                        logger.error("Failed connect to remote server. remote peer = " + serviceNodeAddr);
+                        connected.set(false);
+                    }
+
+                    latch.countDown();
+                }
+            });
+            
+            latch.await();
+            
+            return connected.get() ? ServiceNodeStatus.VALID.status() : ServiceNodeStatus.INVALID.status();
+        }
+        catch (Exception e)
+        {
+            if (latch != null)
+            {
+                latch.countDown();
+            }
+            logger.error(e.getMessage(), e);
+            return ServiceNodeStatus.INVALID.status();
+        }
+        finally
+        {
+            group.shutdownGracefully();
+        }
+
     }
     
     
