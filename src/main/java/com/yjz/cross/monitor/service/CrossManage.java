@@ -11,7 +11,7 @@ import com.yjz.cross.monitor.pojo.QueryCrossServiceReq;
 public interface CrossManage
 {
     /**
-     * @Description 根据条件查询CrossService列表
+     * @Description 
      * @author biw
      * @param req
      * @return
@@ -19,7 +19,7 @@ public interface CrossManage
     public List<CrossService> queryCrossServices(QueryCrossServiceReq req);
     
     /**
-     * @Description 查询crossReference对crossService的调用记录
+     * @Description
      * @author biw
      * @param referenceNodeAddr
      * @param serviceNodeAddr
@@ -28,7 +28,7 @@ public interface CrossManage
     public List<AccessLog> queryAccessRecord(String referenceNodeAddr, String serviceNodeAddr);
     
     /**
-     * @Description 删除一个CrossService节点
+     * @Description
      * @author biw
      * @param serviceName
      * @param serviceNodeAddr
@@ -38,7 +38,7 @@ public interface CrossManage
     
     /**
      * 
-     * @Description 检测CrossService节点的状态
+     * @Description态
      * @author biw
      * @param serviceNodeAddr
      * @return
@@ -47,7 +47,7 @@ public interface CrossManage
     
     /**
      * 
-     * @Description 根据条件查询CrossReference列表
+     * @Description
      * @author biw
      * @param req
      * @return
