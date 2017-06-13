@@ -1,0 +1,4 @@
+com.yjz.cross.monitor.init.CrossMonitorInitializer 2017-06-12 17:51:29,852 -- INFO -- com.yjz.cross.monitor.init.CrossMonitorInitializer.setApplicationContext(CrossMonitorInitializer.java:39) Start loading registries in cross.properties.
+com.yjz.cross.monitor.init.CrossMonitorInitializer 2017-06-12 17:51:29,852 -- INFO -- com.yjz.cross.monitor.init.CrossMonitorInitializer.setApplicationContext(CrossMonitorInitializer.java:39) Start loading registries in cross.properties.
+com.yjz.cross.monitor.init.CrossMonitorInitializer 2017-06-12 17:51:29,853 -- INFO -- com.yjz.cross.monitor.init.CrossMonitorInitializer.setApplicationContext(CrossMonitorInitializer.java:49) Finished loading registries in cross.properties.
+com.yjz.cross.monitor.init.CrossMonitorInitializer 2017-06-12 17:51:29,853 -- INFO -- com.yjz.cross.monitor.init.CrossMonitorInitializer.setApplicationContext(CrossMonitorInitializer.java:49) Finished loading registries in cross.properties.
