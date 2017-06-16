@@ -52,7 +52,7 @@ public class CrossManageImpl implements CrossManage
     public List<CrossService> queryCrossServices(QueryCrossServiceReq req)
     {
         Registry registry = RegistryFactory.instance().getRegistry(req.getRegistryName());
-        List<CrossService> serviceNodeList = new ArrayList<>();
+        List<CrossService> CrossServiceList = new ArrayList<>();
         
         List<String> serviceList = null;
         if(req.getCrossServiceName() == null)
@@ -68,6 +68,11 @@ public class CrossManageImpl implements CrossManage
         for(String serviceName : serviceList)
         { 
             List<String> serviceAddrList = registry.querySerivceNodes(serviceName);
+            if(serviceAddrList.isEmpty())
+            {
+                continue;
+            }
+            
             List<CrossServiceNode> nodeList = new ArrayList<>();   
             for (String addr : serviceAddrList)
             {
@@ -80,14 +85,14 @@ public class CrossManageImpl implements CrossManage
                     convReferenceAddrToNode(serviceName, referenceAddrList);
                 node.setReferenceNodeList(referNodeList);
             }
-            
+
             CrossService crossService = new CrossService();
             crossService.setServiceName(serviceName);   
             crossService.setNodeList(nodeList);
-            serviceNodeList.add(crossService);
+            CrossServiceList.add(crossService);
         }
 
-        return serviceNodeList;
+        return CrossServiceList;
     }
     
     private List<CrossReferenceNode> convReferenceAddrToNode(String serviceName, List<String> referenceAddrList)

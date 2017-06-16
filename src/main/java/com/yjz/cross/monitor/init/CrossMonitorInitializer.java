@@ -12,7 +12,7 @@ import com.yjz.cross.config.Configuration;
 
 /**
  * @ClassName CrossMonitorInitializer
- * @Description ³õÊ¼»¯CrossMonitor
+ * @Description ï¿½ï¿½Ê¼ï¿½ï¿½CrossMonitor
  * @author biw
  * @Date Jun 12, 2017 9:48:06 AM
  * @version 1.0.0
@@ -21,16 +21,17 @@ import com.yjz.cross.config.Configuration;
 public class CrossMonitorInitializer implements ApplicationContextAware
 {
     private static final Logger logger = LoggerFactory.getLogger(CrossMonitorInitializer.class);
+    
     @Value("#{cross['registries']}")
     private String registries;
     
-    public static Configuration CONF;
+    public static Configuration CONF = new Configuration();
     
     @Override
     public void setApplicationContext(ApplicationContext applicationContext)
         throws BeansException
     {
-        if(registries == null)
+        if (registries == null)
         {
             logger.error("there is no registries property configured in cross.properties.");
             return;
@@ -38,13 +39,15 @@ public class CrossMonitorInitializer implements ApplicationContextAware
         
         logger.info("Start loading registries in cross.properties.");
         String[] registryStrArr = registries.split(";");
-        for(String registryStr : registryStrArr)
+        for (String registryStr : registryStrArr)
         {
-            String[] nameAndAddr = registryStr.split("=");
-            if(nameAndAddr.length > 1)
-            {
-                CONF.addRegistry(nameAndAddr[0], nameAndAddr[1]);   
-            }
+            int lbIdx = registryStr.indexOf("(");
+            int rbIdx = registryStr.indexOf(")");
+            
+            String name = registryStr.substring(0, lbIdx);
+            String value = registryStr.substring(lbIdx + 1, rbIdx);
+            
+            CONF.addRegistry(name, value);
         }
         logger.info("Finished loading registries in cross.properties.");
     }
