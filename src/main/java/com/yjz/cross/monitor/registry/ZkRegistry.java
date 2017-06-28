@@ -6,6 +6,7 @@ import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
@@ -34,9 +35,9 @@ public class ZkRegistry implements Registry
 {
     private Logger logger = LoggerFactory.getLogger(this.getClass());
     
-    private static final String ROOT_NODE_PATH = "/cross";
+    private static final String SERVER_ROOT_NODE_PATH = "/cross-server";
     
-    private static final String REFERENCE_ROOT_NODE_PATH = "/cross-reference";
+    private static final String CLIENT_ROOT_NODE_PATH = "/cross-client";
     
     private String registryName = null;
     
@@ -156,15 +157,15 @@ public class ZkRegistry implements Registry
         }
         
         try
-        {  
-            Stat state = zk.exists(ROOT_NODE_PATH, false);
+        {
+            Stat state = zk.exists(SERVER_ROOT_NODE_PATH, false);
             if (state == null)
             {
                 return new ArrayList<String>(0);
             }
             else
             {
-                return zk.getChildren(ROOT_NODE_PATH, false);
+                return zk.getChildren(SERVER_ROOT_NODE_PATH, false);
             }
         }
         catch (KeeperException | InterruptedException e)
@@ -188,7 +189,7 @@ public class ZkRegistry implements Registry
         
         try
         {
-            String serviceAddressPath = ROOT_NODE_PATH + "/" + serviceName;
+            String serviceAddressPath = SERVER_ROOT_NODE_PATH + "/" + serviceName;
             
             Stat state = zk.exists(serviceAddressPath, false);
             if (state == null)
@@ -215,30 +216,31 @@ public class ZkRegistry implements Registry
             connectZk();
         }
         
-        if (zk == null)
+        if (zk != null)
         {
-            return new ArrayList<String>(0);
+            try
+            {
+                String serviceAddressPath = SERVER_ROOT_NODE_PATH + "/" + serviceName + "/" + serviceAddr;
+                Stat state = zk.exists(serviceAddressPath, false);
+                if (state != null)
+                {
+                    byte[] data = zk.getData(serviceAddressPath, false, state);
+                    if (data.length > 0)
+                    {
+                        String clientAddrStr = new String(data);
+                        String[] clientAddrs = clientAddrStr.split(";");
+                        return Arrays.asList(clientAddrs);
+                    }
+                }
+            }
+            catch (KeeperException | InterruptedException e)
+            {
+                logger.error(e.getMessage(), e);
+                throw new CrossException(e);
+            }
         }
         
-        try
-        {
-            String serviceAddressPath = ROOT_NODE_PATH + "/" + serviceName + "/" + serviceAddr;
-            
-            Stat state = zk.exists(serviceAddressPath, false);
-            if (state == null)
-            {
-                return new ArrayList<String>(0);
-            }
-            else
-            {
-                return zk.getChildren(serviceAddressPath, false);
-            }
-        }
-        catch (KeeperException | InterruptedException e)
-        {
-            logger.error(e.getMessage(), e);
-            throw new CrossException(e);
-        }
+        return new ArrayList<String>(0);
     }
     
     @Override
@@ -255,15 +257,15 @@ public class ZkRegistry implements Registry
         }
         
         try
-        {  
-            Stat state = zk.exists(REFERENCE_ROOT_NODE_PATH, false);
+        {
+            Stat state = zk.exists(CLIENT_ROOT_NODE_PATH, false);
             if (state == null)
             {
                 return new ArrayList<String>(0);
             }
             else
             {
-                return zk.getChildren(REFERENCE_ROOT_NODE_PATH, false);
+                return zk.getChildren(CLIENT_ROOT_NODE_PATH, false);
             }
         }
         catch (KeeperException | InterruptedException e)
@@ -288,7 +290,7 @@ public class ZkRegistry implements Registry
         
         try
         {
-            String referAddressPath = REFERENCE_ROOT_NODE_PATH + "/" + referenceName;
+            String referAddressPath = CLIENT_ROOT_NODE_PATH + "/" + referenceName;
             
             Stat state = zk.exists(referAddressPath, false);
             if (state == null)
@@ -307,7 +309,7 @@ public class ZkRegistry implements Registry
         }
         
     }
-
+    
     @Override
     public List<String> queryServiceNodesUnderReferenceNode(String serviceName, String referenceAddr)
     {
@@ -316,30 +318,32 @@ public class ZkRegistry implements Registry
             connectZk();
         }
         
-        if (zk == null)
+        if (zk != null)
         {
-            return new ArrayList<String>(0);
+            try
+            {
+                String serviceAddressPath = CLIENT_ROOT_NODE_PATH + "/" + serviceName + "/" + referenceAddr;
+                
+                Stat state = zk.exists(serviceAddressPath, false);
+                if (state != null)
+                {
+                    byte[] data = zk.getData(serviceAddressPath, false, state);
+                    if(data.length > 0)
+                    {
+                        List<String> list = new ArrayList<>();
+                        list.add(new String(data));
+                        return list;
+                    }
+                }
+            }
+            catch (KeeperException | InterruptedException e)
+            {
+                logger.error(e.getMessage(), e);
+                throw new CrossException(e);
+            }
         }
         
-        try
-        {
-            String serviceAddressPath = REFERENCE_ROOT_NODE_PATH + "/" + serviceName + "/" + referenceAddr;
-            
-            Stat state = zk.exists(serviceAddressPath, false);
-            if (state == null)
-            {
-                return new ArrayList<String>(0);
-            }
-            else
-            {
-                return zk.getChildren(serviceAddressPath, false);
-            }
-        }
-        catch (KeeperException | InterruptedException e)
-        {
-            logger.error(e.getMessage(), e);
-            throw new CrossException(e);
-        }
+        return new ArrayList<String>(0);
     }
     
     @Override
@@ -357,15 +361,15 @@ public class ZkRegistry implements Registry
         
         try
         {
-            zk.delete(ROOT_NODE_PATH + "/" + serviceName + "/" + serviceAddr, -1);
+            zk.delete(SERVER_ROOT_NODE_PATH + "/" + serviceName + "/" + serviceAddr, -1);
         }
         catch (InterruptedException | KeeperException e)
         {
-           logger.error(e.getMessage(), e);
+            logger.error(e.getMessage(), e);
             throw new CrossException(e);
         }
     }
-
+    
     public static void main(String[] args)
         throws IOException, InterruptedException
     {
@@ -386,13 +390,13 @@ public class ZkRegistry implements Registry
         
         try
         {
-            List<String> list = zk.getChildren(ROOT_NODE_PATH, false);
+            List<String> list = zk.getChildren(SERVER_ROOT_NODE_PATH, false);
             for (String serv : list)
             {
-                List<String> addrList = zk.getChildren(ROOT_NODE_PATH + "/" + serv, false);
+                List<String> addrList = zk.getChildren(SERVER_ROOT_NODE_PATH + "/" + serv, false);
                 for (String addr : addrList)
                 {
-                    zk.delete(ROOT_NODE_PATH + "/" + serv + "/" + addr, -1);
+                    zk.delete(SERVER_ROOT_NODE_PATH + "/" + serv + "/" + addr, -1);
                 }
             }
         }

@@ -51,7 +51,7 @@ public class CrossManageImpl implements CrossManage
     @Override
     public List<CrossService> queryCrossServices(QueryCrossServiceReq req)
     {
-        Registry registry = RegistryFactory.instance().getRegistry(req.getRegistryName());
+        Registry registry = RegistryFactory.instance().getRegistry();
         List<CrossService> CrossServiceList = new ArrayList<>();
         
         List<String> serviceList = null;
@@ -110,7 +110,7 @@ public class CrossManageImpl implements CrossManage
     @Override
     public List<CrossReference> queryCrossReferences(QueryCrossReferenceReq req)
     {
-        Registry registry = RegistryFactory.instance().getRegistry(req.getRegistryName());
+        Registry registry = RegistryFactory.instance().getRegistry();
         List<CrossReference> referenceList = new ArrayList<>();
         
         List<String> referNameList = null;
