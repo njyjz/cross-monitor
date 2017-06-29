@@ -10,7 +10,7 @@ public class CrossServiceNode
     
     private String status = ServiceNodeStatus.UNKNONW.status();
     
-    private List<CrossReferenceNode> referenceNodeList;
+    private List<CrossReferenceNode> subNodeList;
     
     public CrossServiceNode()
     {
@@ -45,12 +45,12 @@ public class CrossServiceNode
 
     public List<CrossReferenceNode> getReferenceNodeList()
     {
-        return referenceNodeList;
+        return subNodeList;
     }
 
     public void setReferenceNodeList(List<CrossReferenceNode> nodeList)
     {
-        this.referenceNodeList = nodeList;
+        this.subNodeList = nodeList;
     }
 
     public String getStatus()

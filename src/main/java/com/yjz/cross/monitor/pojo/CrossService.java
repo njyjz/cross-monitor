@@ -4,30 +4,30 @@ import java.util.List;
 
 public class CrossService
 {
-    private String serviceClassName;
+    private String serviceName;
     
-    private List<CrossServiceNode> nodeList;
+    private List<CrossServiceNode> subNodeList;
     
     
 
     public String getServiceName()
     {
-        return serviceClassName;
+        return serviceName;
     }
 
     public void setServiceName(String serviceName)
     {
-        this.serviceClassName = serviceName;
+        this.serviceName = serviceName;
     }
 
     public List<CrossServiceNode> getNodeList()
     {
-        return nodeList;
+        return subNodeList;
     }
 
     public void setNodeList(List<CrossServiceNode> nodeList)
     {
-        this.nodeList = nodeList;
+        this.subNodeList = nodeList;
     }
     
     
