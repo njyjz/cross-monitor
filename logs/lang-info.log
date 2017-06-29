@@ -66,3 +66,27 @@ com.yjz.cross.monitor.init.CrossMonitorInitializer 2017-06-29 10:11:19,763 -- IN
 com.yjz.cross.monitor.init.CrossMonitorInitializer 2017-06-29 10:11:19,763 -- INFO -- com.yjz.cross.monitor.init.CrossMonitorInitializer.setApplicationContext(CrossMonitorInitializer.java:40) Start loading registries in cross.properties.
 com.yjz.cross.monitor.init.CrossMonitorInitializer 2017-06-29 10:11:19,769 -- INFO -- com.yjz.cross.monitor.init.CrossMonitorInitializer.setApplicationContext(CrossMonitorInitializer.java:52) Finished loading registries in cross.properties.
 com.yjz.cross.monitor.init.CrossMonitorInitializer 2017-06-29 10:11:19,769 -- INFO -- com.yjz.cross.monitor.init.CrossMonitorInitializer.setApplicationContext(CrossMonitorInitializer.java:52) Finished loading registries in cross.properties.
+com.yjz.microweb.transport.HttpServerInboundHandler 2017-06-29 10:16:23,261 -- ERROR -- com.yjz.microweb.transport.HttpServerInboundHandler.exceptionCaught(HttpServerInboundHandler.java:97) 
+io.netty.handler.timeout.ReadTimeoutException
+com.yjz.microweb.transport.HttpServerInboundHandler 2017-06-29 10:16:23,335 -- ERROR -- com.yjz.microweb.transport.HttpServerInboundHandler.exceptionCaught(HttpServerInboundHandler.java:97) 
+io.netty.handler.timeout.ReadTimeoutException
+com.yjz.microweb.transport.HttpServerInboundHandler 2017-06-29 10:16:23,437 -- ERROR -- com.yjz.microweb.transport.HttpServerInboundHandler.exceptionCaught(HttpServerInboundHandler.java:97) 
+io.netty.handler.timeout.ReadTimeoutException
+com.yjz.microweb.transport.HttpServerInboundHandler 2017-06-29 10:16:23,438 -- ERROR -- com.yjz.microweb.transport.HttpServerInboundHandler.exceptionCaught(HttpServerInboundHandler.java:97) 
+io.netty.handler.timeout.ReadTimeoutException
+com.yjz.cross.monitor.init.CrossMonitorInitializer 2017-06-29 10:19:03,312 -- INFO -- com.yjz.cross.monitor.init.CrossMonitorInitializer.setApplicationContext(CrossMonitorInitializer.java:40) Start loading registries in cross.properties.
+com.yjz.cross.monitor.init.CrossMonitorInitializer 2017-06-29 10:19:03,312 -- INFO -- com.yjz.cross.monitor.init.CrossMonitorInitializer.setApplicationContext(CrossMonitorInitializer.java:40) Start loading registries in cross.properties.
+com.yjz.cross.monitor.init.CrossMonitorInitializer 2017-06-29 10:19:03,315 -- INFO -- com.yjz.cross.monitor.init.CrossMonitorInitializer.setApplicationContext(CrossMonitorInitializer.java:52) Finished loading registries in cross.properties.
+com.yjz.cross.monitor.init.CrossMonitorInitializer 2017-06-29 10:19:03,315 -- INFO -- com.yjz.cross.monitor.init.CrossMonitorInitializer.setApplicationContext(CrossMonitorInitializer.java:52) Finished loading registries in cross.properties.
+com.yjz.microweb.transport.HttpServerInboundHandler 2017-06-29 10:27:26,591 -- ERROR -- com.yjz.microweb.transport.HttpServerInboundHandler.exceptionCaught(HttpServerInboundHandler.java:97) 
+io.netty.handler.timeout.ReadTimeoutException
+com.yjz.microweb.transport.HttpServerInboundHandler 2017-06-29 10:27:26,611 -- ERROR -- com.yjz.microweb.transport.HttpServerInboundHandler.exceptionCaught(HttpServerInboundHandler.java:97) 
+io.netty.handler.timeout.ReadTimeoutException
+com.yjz.microweb.transport.HttpServerInboundHandler 2017-06-29 10:27:26,711 -- ERROR -- com.yjz.microweb.transport.HttpServerInboundHandler.exceptionCaught(HttpServerInboundHandler.java:97) 
+io.netty.handler.timeout.ReadTimeoutException
+com.yjz.microweb.transport.HttpServerInboundHandler 2017-06-29 10:27:26,713 -- ERROR -- com.yjz.microweb.transport.HttpServerInboundHandler.exceptionCaught(HttpServerInboundHandler.java:97) 
+io.netty.handler.timeout.ReadTimeoutException
+com.yjz.cross.monitor.registry.ZkRegistry 2017-06-29 10:33:16,428 -- INFO -- com.yjz.cross.monitor.registry.ZkRegistry.connectZk(ZkRegistry.java:99) Cross server connecting to zkServer 127.0.0.1:2181
+com.yjz.cross.monitor.registry.ZkRegistry 2017-06-29 10:33:16,428 -- INFO -- com.yjz.cross.monitor.registry.ZkRegistry.connectZk(ZkRegistry.java:99) Cross server connecting to zkServer 127.0.0.1:2181
+com.yjz.cross.monitor.registry.ZkRegistry 2017-06-29 10:33:18,032 -- INFO -- com.yjz.cross.monitor.registry.ZkRegistry$1.process(ZkRegistry.java:109) Cross server connected to zkServer 127.0.0.1:2181
+com.yjz.cross.monitor.registry.ZkRegistry 2017-06-29 10:33:18,032 -- INFO -- com.yjz.cross.monitor.registry.ZkRegistry$1.process(ZkRegistry.java:109) Cross server connected to zkServer 127.0.0.1:2181

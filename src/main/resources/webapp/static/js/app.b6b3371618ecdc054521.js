@@ -266,7 +266,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                     Accept: "application/json",
                     "Content-Type": "application/json"
                 },
-                data: {},
+                data: JSON.stringify(e),
                 dataType: "json",
                 success: function success(e) {
                     console.log(e);

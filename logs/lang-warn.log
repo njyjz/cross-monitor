@@ -62,3 +62,19 @@ Caused by: org.springframework.web.util.NestedServletException: Request processi
 	at com.yjz.microweb.filter.MicrowebFilterChain.doFilter(MicrowebFilterChain.java:108)
 	... 8 more
 Caused by: java.lang.NullPointerException
+com.yjz.microweb.transport.HttpServerInboundHandler 2017-06-29 10:16:23,261 -- ERROR -- com.yjz.microweb.transport.HttpServerInboundHandler.exceptionCaught(HttpServerInboundHandler.java:97) 
+io.netty.handler.timeout.ReadTimeoutException
+com.yjz.microweb.transport.HttpServerInboundHandler 2017-06-29 10:16:23,335 -- ERROR -- com.yjz.microweb.transport.HttpServerInboundHandler.exceptionCaught(HttpServerInboundHandler.java:97) 
+io.netty.handler.timeout.ReadTimeoutException
+com.yjz.microweb.transport.HttpServerInboundHandler 2017-06-29 10:16:23,437 -- ERROR -- com.yjz.microweb.transport.HttpServerInboundHandler.exceptionCaught(HttpServerInboundHandler.java:97) 
+io.netty.handler.timeout.ReadTimeoutException
+com.yjz.microweb.transport.HttpServerInboundHandler 2017-06-29 10:16:23,438 -- ERROR -- com.yjz.microweb.transport.HttpServerInboundHandler.exceptionCaught(HttpServerInboundHandler.java:97) 
+io.netty.handler.timeout.ReadTimeoutException
+com.yjz.microweb.transport.HttpServerInboundHandler 2017-06-29 10:27:26,591 -- ERROR -- com.yjz.microweb.transport.HttpServerInboundHandler.exceptionCaught(HttpServerInboundHandler.java:97) 
+io.netty.handler.timeout.ReadTimeoutException
+com.yjz.microweb.transport.HttpServerInboundHandler 2017-06-29 10:27:26,611 -- ERROR -- com.yjz.microweb.transport.HttpServerInboundHandler.exceptionCaught(HttpServerInboundHandler.java:97) 
+io.netty.handler.timeout.ReadTimeoutException
+com.yjz.microweb.transport.HttpServerInboundHandler 2017-06-29 10:27:26,711 -- ERROR -- com.yjz.microweb.transport.HttpServerInboundHandler.exceptionCaught(HttpServerInboundHandler.java:97) 
+io.netty.handler.timeout.ReadTimeoutException
+com.yjz.microweb.transport.HttpServerInboundHandler 2017-06-29 10:27:26,713 -- ERROR -- com.yjz.microweb.transport.HttpServerInboundHandler.exceptionCaught(HttpServerInboundHandler.java:97) 
+io.netty.handler.timeout.ReadTimeoutException
