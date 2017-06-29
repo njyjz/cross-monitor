@@ -51,7 +51,7 @@ public class CrossManageImpl implements CrossManage
     @Override
     public List<CrossService> queryCrossServices(QueryCrossServiceReq req)
     {
-        Registry registry = RegistryFactory.instance().getRegistry(req.getRegistryName());
+        Registry registry = RegistryFactory.instance().getRegistry();
         List<CrossService> CrossServiceList = new ArrayList<>();
         
         List<String> serviceList = null;
@@ -80,7 +80,7 @@ public class CrossManageImpl implements CrossManage
                 nodeList.add(node);
                 
                 List<String> referenceAddrList =
-                    registry.queryReferenceNodesUnderServiceNode(serviceName, addr);
+                    registry.queryClientsUnderServer(serviceName, addr);
                 List<CrossReferenceNode> referNodeList =
                     convReferenceAddrToNode(serviceName, referenceAddrList);
                 node.setReferenceNodeList(referNodeList);
@@ -110,7 +110,7 @@ public class CrossManageImpl implements CrossManage
     @Override
     public List<CrossReference> queryCrossReferences(QueryCrossReferenceReq req)
     {
-        Registry registry = RegistryFactory.instance().getRegistry(req.getRegistryName());
+        Registry registry = RegistryFactory.instance().getRegistry();
         List<CrossReference> referenceList = new ArrayList<>();
         
         List<String> referNameList = null;
@@ -126,11 +126,11 @@ public class CrossManageImpl implements CrossManage
         
         for(String referName : referNameList)
         {
-            List<String> referAddrList = registry.queryReferenceNodes(referName);
-            List<CrossReferenceNode> referNodeList = convReferenceAddrToNode(referName, referAddrList);
+            List<String> clientAddrList = registry.queryClientNodes(referName);
+            List<CrossReferenceNode> referNodeList = convReferenceAddrToNode(referName, clientAddrList);
             for(CrossReferenceNode referNode : referNodeList)
             {
-                List<String> serviceAddrList = registry.queryReferenceNodesUnderServiceNode(referName, referNode.getAddress());
+                List<String> serviceAddrList = registry.queryServersUnderClient(referName, referNode.getAddress());
                 if(serviceAddrList != null && !serviceAddrList.isEmpty())
                 {
                     CrossServiceNode serviceNode = new CrossServiceNode(referName, serviceAddrList.get(0));
@@ -148,22 +148,22 @@ public class CrossManageImpl implements CrossManage
     }
     
     @Override
-    public List<AccessLog> queryAccessRecord(String referenceNode, String serviceNode)
+    public List<AccessLog> queryAccessRecord(String serverAddress, String clientAddress)
     {
         // TODO 
         return new ArrayList<>();
     }
     
     @Override
-    public int delServiceNode(String serviceName, String serviceNodeAddr)
+    public int delServiceNode(String serviceName, String serverAddr)
     {
         Registry registry = RegistryFactory.instance().getRegistry(serviceName);
-        registry.delServiceNode(serviceName, serviceNodeAddr);
+        registry.delServiceNode(serviceName, serverAddr);
         return 1;
     }
     
     @Override
-    public String detectServiceNodeStatus(String serviceNodeAddr)
+    public String detectServiceNodeStatus(String serverAddr)
     {
         CountDownLatch latch = new CountDownLatch(1);
         AtomicBoolean connected = new AtomicBoolean(false);
@@ -189,7 +189,7 @@ public class CrossManageImpl implements CrossManage
                 });
                 
             // Start the client.
-            String[] args = serviceNodeAddr.split(":");
+            String[] args = serverAddr.split(":");
             System.out.println("'netty connect to " + args[0] + ":" + args[1]);
             ChannelFuture channelFuture = b.connect(args[0], Integer.parseInt(args[1])).sync();
             
@@ -201,12 +201,12 @@ public class CrossManageImpl implements CrossManage
                 {
                     if (channelFuture.isSuccess())
                     {
-                        logger.info("Successfully connect to remote server. remote peer = " + serviceNodeAddr);
+                        logger.info("Successfully connect to remote server. remote peer = " + serverAddr);
                         connected.set(true);
                     }
                     else
                     {
-                        logger.error("Failed connect to remote server. remote peer = " + serviceNodeAddr);
+                        logger.error("Failed connect to remote server. remote peer = " + serverAddr);
                         connected.set(false);
                     }
 

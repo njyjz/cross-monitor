@@ -43,7 +43,7 @@ public interface CrossManage
      * @param serviceNodeAddr
      * @return
      */
-    public String detectServiceNodeStatus(String serviceNodeAddr);
+    public String detectServiceNodeStatus(String serverAddr);
     
     /**
      * 

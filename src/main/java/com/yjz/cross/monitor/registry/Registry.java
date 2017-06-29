@@ -22,13 +22,13 @@ public interface Registry
     
     public List<String> querySerivceNodes(String serviceName);
     
-    public List<String> queryReferenceNodesUnderServiceNode(String serviceName, String serviceAddr);
+    public List<String> queryClientsUnderServer(String serviceName, String serverAddr);
     
     public List<String> queryAllReferenceNodes();
     
-    public List<String> queryReferenceNodes(String referenceName);
+    public List<String> queryClientNodes(String referenceName);
     
-    public List<String> queryServiceNodesUnderReferenceNode(String serviceName, String referenceAddr);
+    public List<String> queryServersUnderClient(String serviceName, String clientAddr);
     
-    public void delServiceNode(String serviceName, String serviceAddr);
+    public void delServiceNode(String serviceName, String serverAddr);
 }
