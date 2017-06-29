@@ -4,6 +4,10 @@ public class AccessLog
 {
     private String requestId;
     
+    private String serverAddress;
+    
+    private String clientAddress;
+    
     private String reqJson;
     
     private String respJson;
@@ -18,6 +22,26 @@ public class AccessLog
     public void setRequestId(String requestId)
     {
         this.requestId = requestId;
+    }
+
+    public String getServerAddress()
+    {
+        return serverAddress;
+    }
+
+    public void setServerAddress(String serverAddress)
+    {
+        this.serverAddress = serverAddress;
+    }
+
+    public String getClientAddress()
+    {
+        return clientAddress;
+    }
+
+    public void setClientAddress(String clientAddress)
+    {
+        this.clientAddress = clientAddress;
     }
 
     public String getReqJson()

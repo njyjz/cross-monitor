@@ -209,7 +209,7 @@ public class ZkRegistry implements Registry
         
     }
     
-    public List<String> queryReferenceNodesUnderServiceNode(String serviceName, String serviceAddr)
+    public List<String> queryClientsUnderServer(String serviceName, String serverAddr)
     {
         if (zk == null)
         {
@@ -220,7 +220,7 @@ public class ZkRegistry implements Registry
         {
             try
             {
-                String serviceAddressPath = SERVER_ROOT_NODE_PATH + "/" + serviceName + "/" + serviceAddr;
+                String serviceAddressPath = SERVER_ROOT_NODE_PATH + "/" + serviceName + "/" + serverAddr;
                 Stat state = zk.exists(serviceAddressPath, false);
                 if (state != null)
                 {
@@ -276,7 +276,7 @@ public class ZkRegistry implements Registry
     }
     
     @Override
-    public List<String> queryReferenceNodes(String referenceName)
+    public List<String> queryClientNodes(String serviceName)
     {
         if (zk == null)
         {
@@ -290,7 +290,7 @@ public class ZkRegistry implements Registry
         
         try
         {
-            String referAddressPath = CLIENT_ROOT_NODE_PATH + "/" + referenceName;
+            String referAddressPath = CLIENT_ROOT_NODE_PATH + "/" + serviceName;
             
             Stat state = zk.exists(referAddressPath, false);
             if (state == null)
@@ -311,7 +311,7 @@ public class ZkRegistry implements Registry
     }
     
     @Override
-    public List<String> queryServiceNodesUnderReferenceNode(String serviceName, String referenceAddr)
+    public List<String> queryServersUnderClient(String serviceName, String clientAddr)
     {
         if (zk == null)
         {
@@ -322,7 +322,7 @@ public class ZkRegistry implements Registry
         {
             try
             {
-                String serviceAddressPath = CLIENT_ROOT_NODE_PATH + "/" + serviceName + "/" + referenceAddr;
+                String serviceAddressPath = CLIENT_ROOT_NODE_PATH + "/" + serviceName + "/" + clientAddr;
                 
                 Stat state = zk.exists(serviceAddressPath, false);
                 if (state != null)
@@ -347,7 +347,7 @@ public class ZkRegistry implements Registry
     }
     
     @Override
-    public void delServiceNode(String serviceName, String serviceAddr)
+    public void delServiceNode(String serviceName, String serverAddr)
     {
         if (zk == null)
         {
@@ -361,7 +361,7 @@ public class ZkRegistry implements Registry
         
         try
         {
-            zk.delete(SERVER_ROOT_NODE_PATH + "/" + serviceName + "/" + serviceAddr, -1);
+            zk.delete(SERVER_ROOT_NODE_PATH + "/" + serviceName + "/" + serverAddr, -1);
         }
         catch (InterruptedException | KeeperException e)
         {

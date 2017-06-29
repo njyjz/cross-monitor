@@ -66,9 +66,9 @@ public class CrossManageController
      */
     @RequestMapping("/detectServiceNodeStatus.do")
     @ResponseBody
-    public String detectServiceNodeStatus(String serviceNodeAddr)
+    public String detectServiceNodeStatus(String serverAddr)
     {
-        return crossManage.detectServiceNodeStatus(serviceNodeAddr);
+        return crossManage.detectServiceNodeStatus(serverAddr);
     }
     
     /**
@@ -88,14 +88,14 @@ public class CrossManageController
     /**
      * @Description
      * @author biw
-     * @param referenceNodeAddr
-     * @param serviceNodeAddr
+     * @param serverAddress
+     * @param clientAddress
      * @return
      */
     @RequestMapping("/queryAccessRecord.do")
     @ResponseBody
-    public List<AccessLog> queryAccessRecord(String referenceNodeAddr, String serviceNodeAddr)
+    public List<AccessLog> queryAccessRecord(String serverAddress, String clientAddress)
     {
-        return crossManage.queryAccessRecord(referenceNodeAddr, serviceNodeAddr);
+        return crossManage.queryAccessRecord(serverAddress, clientAddress);
     }
 }
