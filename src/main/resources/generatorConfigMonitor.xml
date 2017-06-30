@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN" "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd" >
+<generatorConfiguration >
+<!--数据库驱动-->
+<classPathEntry
+		location="E:\maven-repository\mysql\mysql-connector-java\5.1.34\mysql-connector-java-5.1.34.jar" />
+  <context id="cross-monitor" >
+  <!--数据库链接地址账号密码-->
+    <jdbcConnection driverClass="com.mysql.jdbc.Driver" connectionURL="jdbc:mysql://10.159.62.213:3306/crosslog" userId="root" password="123456" />
+    <!--生成Model类存放位置-->
+    <javaModelGenerator targetPackage="com.yjz.cross.monitor.model" targetProject="cross-monitor" />
+    <!--生成映射文件存放位置-->
+    <sqlMapGenerator targetPackage="com.yjz.cross.monitor.dao.mapper" targetProject="cross-monitor" />
+    <!--生成Dao类存放位置-->
+    <javaClientGenerator targetPackage="com.yjz.cross.monitor.dao" targetProject="cross-monitor" type="XMLMAPPER" />
+    
+    <!--生成对应表及类名-->
+   
+    <!--access_log-->
+    <table schema="" tableName="access_log" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"
+    					enableSelectByExample="false" selectByExampleQueryId="false">
+    </table>
+  </context>
+</generatorConfiguration>
