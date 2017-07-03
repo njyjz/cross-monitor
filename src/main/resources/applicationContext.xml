@@ -50,7 +50,7 @@
     <property name="dataSource" ref="dataSource" />
   </bean>
   
-  <!-- 扫描dao接口批量生成实现组件对象 -->
+  
   	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
 		<property name="basePackage" value="com.yjz.cross.monitor.dao" />
   	</bean>
@@ -58,12 +58,7 @@
   <bean id="transactionAttributes" class="org.springframework.transaction.interceptor.NameMatchTransactionAttributeSource">
     <property name="properties">
       <props>
-        <!-- PROPAGATION_SUPPORTS: 已经存在事务则加入事务，没有事务则以非事务的方式执行 -->
-        <!-- PROPAGATION_MANDATORY: 使用当前事务，没有事务则抛出异常 -->
-        <!-- PROPAGATION_REQUIRED: 新建事务，已经存在事务则挂起 -->
-        <!-- ROPAGATION_NOT_SUPPORTED: 以非事务的方式执行，已经存在事务则挂起 -->
-        <!-- PROPAGATION_NEVER: 以非事务的方式执行，已经存在事务则抛出异常 -->
-        <!-- +/-Exception: + 表示异常出现时事物提交 ，- 表示异常出现时事务回滚 -->
+        
         <prop key="insert*">PROPAGATION_REQUIRED,-Exception</prop>
         <prop key="regist*">PROPAGATION_REQUIRED,-Exception</prop>
         <prop key="update*">PROPAGATION_REQUIRED,-Exception</prop>
@@ -87,7 +82,7 @@
     <property name="transactionAttributeSource" ref="transactionAttributes" />
   </bean>
 
-  <!-- 针对类名，使用代理模式控制事务，全局有效 -->
+  
   <bean id="proxyFactory" class="org.springframework.aop.framework.autoproxy.BeanNameAutoProxyCreator">
     <property name="interceptorNames">
       <list>
