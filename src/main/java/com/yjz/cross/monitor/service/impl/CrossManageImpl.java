@@ -115,6 +115,18 @@ public class CrossManageImpl implements CrossManage
         return referNodeList;
     }
     
+    private List<CrossServiceNode> convServiceAddrToNode(String serviceName, List<String> serviceAddrList)
+    {
+        List<CrossServiceNode> serviceNodeList = new ArrayList<>();
+        for (String addr : serviceAddrList)
+        {
+            CrossServiceNode node = new CrossServiceNode(serviceName, addr);
+            serviceNodeList.add(node);
+        }
+        
+        return serviceNodeList;
+    }
+    
     @Override
     public List<CrossReference> queryCrossReferences(QueryCrossReferenceReq req)
     {
@@ -122,7 +134,8 @@ public class CrossManageImpl implements CrossManage
         List<CrossReference> referenceList = new ArrayList<>();
         
         List<String> referNameList = null;
-        if (req.getCrossReferenceName() != null)
+        
+        if (req.getCrossReferenceName() == null)
         {
             referNameList = registry.queryAllReferenceNodes();
         }
@@ -139,15 +152,14 @@ public class CrossManageImpl implements CrossManage
             for (CrossReferenceNode referNode : referNodeList)
             {
                 List<String> serviceAddrList = registry.queryServersUnderClient(referName, referNode.getAddress());
-                if (serviceAddrList != null && !serviceAddrList.isEmpty())
-                {
-                    CrossServiceNode serviceNode = new CrossServiceNode(referName, serviceAddrList.get(0));
-                    referNode.setServiceNode(serviceNode);
-                }
+                
+                List<CrossServiceNode> serviceNodeList = convServiceAddrToNode(referName, serviceAddrList);
+                referNode.setSubNodeList(serviceNodeList);
+                
             }
             
             CrossReference crossReference = new CrossReference();
-            crossReference.setReferenceNodeList(referNodeList);
+            crossReference.setSubNodeList(referNodeList);
             crossReference.setServiceName(referName);
             referenceList.add(crossReference);
             
