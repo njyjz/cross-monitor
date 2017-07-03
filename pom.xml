@@ -149,9 +149,6 @@
 			<version>1.0.0</version>
 		</dependency>
 
-<<<<<<< HEAD
-
-
 		<dependency>
 			<groupId>com.yjz.microweb</groupId>
 			<artifactId>microweb</artifactId>
@@ -163,9 +160,7 @@
 			<artifactId>cross-common</artifactId>
 			<version>1.0.0</version>
 		</dependency>
-=======
-		
->>>>>>> 3731de60aac9e0de5d051eb5716c3c6a5c3da113
+
 
 		<dependency>
 			<groupId>org.springframework</groupId>
