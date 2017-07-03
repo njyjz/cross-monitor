@@ -12,7 +12,7 @@ import com.yjz.cross.config.Configuration;
 
 /**
  * @ClassName CrossMonitorInitializer
- * @Description ��ʼ��CrossMonitor
+ * @Description CrossMonitor
  * @author biw
  * @Date Jun 12, 2017 9:48:06 AM
  * @version 1.0.0
