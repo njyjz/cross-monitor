@@ -6,7 +6,7 @@ public class CrossReference
 {
     private String serviceName;
     
-    private List<CrossReferenceNode> referenceNodeList;
+    private List<CrossReferenceNode> subNodeList;
 
     public String getServiceName()
     {
@@ -18,14 +18,14 @@ public class CrossReference
         this.serviceName = serviceName;
     }
 
-    public List<CrossReferenceNode> getReferenceNodeList()
+    public List<CrossReferenceNode> getSubNodeList()
     {
-        return referenceNodeList;
+        return subNodeList;
     }
 
-    public void setReferenceNodeList(List<CrossReferenceNode> nodeList)
+    public void setSubNodeList(List<CrossReferenceNode> subNodeList)
     {
-        this.referenceNodeList = nodeList;
+        this.subNodeList = subNodeList;
     }
     
     

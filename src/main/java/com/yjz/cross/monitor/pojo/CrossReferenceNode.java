@@ -1,12 +1,14 @@
 package com.yjz.cross.monitor.pojo;
 
+import java.util.List;
+
 public class CrossReferenceNode
 {
     private String address;
     
     private String serviceName;
     
-    private CrossServiceNode serviceNode;
+    private List<CrossServiceNode> subNodeList ;
     
     public CrossReferenceNode()
     {
@@ -39,14 +41,14 @@ public class CrossReferenceNode
         this.serviceName = serviceName;
     }
 
-    public CrossServiceNode getServiceNode()
+    public List<CrossServiceNode> getSubNodeList()
     {
-        return serviceNode;
+        return subNodeList;
     }
 
-    public void setServiceNode(CrossServiceNode serviceNode)
+    public void setSubNodeList(List<CrossServiceNode> subNodeList)
     {
-        this.serviceNode = serviceNode;
+        this.subNodeList = subNodeList;
     }
     
     
