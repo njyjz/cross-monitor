@@ -114,7 +114,7 @@ public class CrossManageImpl implements CrossManage
         List<CrossReference> referenceList = new ArrayList<>();
         
         List<String> referNameList = null;
-        if(req.getCrossReferenceName() != null)
+        if(req.getCrossReferenceName()== null)
         {
             referNameList = registry.queryAllReferenceNodes();
         }
