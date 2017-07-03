@@ -20,14 +20,14 @@ public class CrossService
         this.serviceName = serviceName;
     }
 
-    public List<CrossServiceNode> getNodeList()
+    public List<CrossServiceNode> getSubNodeList()
     {
         return subNodeList;
     }
 
-    public void setNodeList(List<CrossServiceNode> nodeList)
+    public void setSubNodeList(List<CrossServiceNode> subNodeList)
     {
-        this.subNodeList = nodeList;
+        this.subNodeList = subNodeList;
     }
     
     

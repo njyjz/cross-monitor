@@ -96,7 +96,7 @@ public class CrossManageImpl implements CrossManage
             
             CrossService crossService = new CrossService();
             crossService.setServiceName(serviceName);
-            crossService.setNodeList(nodeList);
+            crossService.setSubNodeList(nodeList);
             CrossServiceList.add(crossService);
         }
         
