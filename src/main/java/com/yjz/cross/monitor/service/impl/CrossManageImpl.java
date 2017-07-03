@@ -181,6 +181,7 @@ public class CrossManageImpl implements CrossManage
                 AccessLog accessLog = null;
                 for (AccessLogData accessLogData : accessLogDataList)
                 {
+                    accessLog = new AccessLog();
                     accessLog.setRequestId(accessLogData.getRequestId());
                     accessLog.setServerAddress(accessLogData.getServerAddress());
                     accessLog.setClientAddress(accessLogData.getClientAddress());
