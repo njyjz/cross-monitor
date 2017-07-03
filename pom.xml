@@ -149,11 +149,7 @@
 			<version>1.0.0</version>
 		</dependency>
 
-		<dependency>
-			<groupId>com.yjz.cross</groupId>
-			<artifactId>cross-client</artifactId>
-			<version>1.0.0</version>
-		</dependency>
+		
 
 			<dependency>
 				<groupId>com.yjz.microweb</groupId>
