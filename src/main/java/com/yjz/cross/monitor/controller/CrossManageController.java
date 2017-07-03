@@ -14,6 +14,7 @@ import com.yjz.cross.monitor.pojo.CrossReference;
 import com.yjz.cross.monitor.pojo.CrossService;
 import com.yjz.cross.monitor.pojo.QueryCrossReferenceReq;
 import com.yjz.cross.monitor.pojo.QueryCrossServiceReq;
+import com.yjz.cross.monitor.service.AccessLogService;
 import com.yjz.cross.monitor.service.CrossManage;
 
 /**
@@ -30,8 +31,11 @@ public class CrossManageController
     @Resource
     private CrossManage crossManage;
     
+    @Resource
+    private AccessLogService accessLogService;
+    
     /**
-     * @Description 
+     * @Description
      * @author biw
      * @param req
      * @return
@@ -97,5 +101,12 @@ public class CrossManageController
     public List<AccessLog> queryAccessRecord(String serverAddress, String clientAddress)
     {
         return crossManage.queryAccessRecord(serverAddress, clientAddress);
+    }
+    
+    @RequestMapping("/insert.do")
+    @ResponseBody
+    public int insert(AccessLog accessLog)
+    {
+        return accessLogService.insert(accessLog);
     }
 }

@@ -1,7 +1,7 @@
 /*==============================================================*/
 /* Table: access_log                                             */
 /*==============================================================*/
-create table access_log
+create table access_log_data
 (
    id                   int(9)                         auto_increment not null,
    request_id              varchar(10)                       null,

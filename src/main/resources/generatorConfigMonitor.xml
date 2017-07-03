@@ -16,8 +16,8 @@
     
     <!--生成对应表及类名-->
    
-    <!--access_log-->
-    <table schema="" tableName="access_log" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"
+    <!--access_log_data-->
+    <table schema="" tableName="access_log_data" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"
     					enableSelectByExample="false" selectByExampleQueryId="false">
     </table>
   </context>

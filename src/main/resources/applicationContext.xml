@@ -15,9 +15,94 @@
 	 
     <context:component-scan base-package="com.yjz.cross.monitor" annotation-config="true"/>
     
+    <bean id="propertyConfig" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+    <property name="locations">
+      <list>
+		<value>classpath*:datasource.properties</value>
+      </list>
+    </property>
+    <!--property name="propertiesPersister">
+            <bean class="com.xuefu.lang.common.propertiesextend.MyPropertiesPersist" />
+    </property-->
+    
+    <property name="ignoreUnresolvablePlaceholders" value="true" />
+    <property name="ignoreResourceNotFound" value="true" />
+  </bean>
+    
+    <import resource="classpath*:datasource.xml" />
+    
     <!-- 定义SpringMVC -->
 	<mvc:annotation-driven/>
     
     <util:properties id="cross" location="classpath*:cross.properties" />
+    
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+    <property name="dataSource" ref="dataSource" />
+    <property name="configLocation" value="classpath:sqlConfiguration.xml" />
+    <property name="mapperLocations" value="classpath*:com/yjz/cross/monitor/**/*Mapper.xml" />
+  </bean>
+
+	<bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate" scope="prototype" autowire="constructor">
+		<constructor-arg index="0" ref="sqlSessionFactory" />
+	</bean>
+	
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+    <property name="dataSource" ref="dataSource" />
+  </bean>
+  
+  <!-- 扫描dao接口批量生成实现组件对象 -->
+  	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="com.yjz.cross.monitor.dao" />
+  	</bean>
+  
+  <bean id="transactionAttributes" class="org.springframework.transaction.interceptor.NameMatchTransactionAttributeSource">
+    <property name="properties">
+      <props>
+        <!-- PROPAGATION_SUPPORTS: 已经存在事务则加入事务，没有事务则以非事务的方式执行 -->
+        <!-- PROPAGATION_MANDATORY: 使用当前事务，没有事务则抛出异常 -->
+        <!-- PROPAGATION_REQUIRED: 新建事务，已经存在事务则挂起 -->
+        <!-- ROPAGATION_NOT_SUPPORTED: 以非事务的方式执行，已经存在事务则挂起 -->
+        <!-- PROPAGATION_NEVER: 以非事务的方式执行，已经存在事务则抛出异常 -->
+        <!-- +/-Exception: + 表示异常出现时事物提交 ，- 表示异常出现时事务回滚 -->
+        <prop key="insert*">PROPAGATION_REQUIRED,-Exception</prop>
+        <prop key="regist*">PROPAGATION_REQUIRED,-Exception</prop>
+        <prop key="update*">PROPAGATION_REQUIRED,-Exception</prop>
+        <prop key="del*">PROPAGATION_REQUIRED,-Exception</prop>
+        <prop key="remove*">PROPAGATION_REQUIRED,-Exception</prop>
+        <prop key="save">PROPAGATION_REQUIRED,-Exception</prop>
+        <prop key="add*">PROPAGATION_REQUIRED,-Exception</prop>
+        <prop key="create*">PROPAGATION_REQUIRED,-Exception</prop>
+        <prop key="modify*">PROPAGATION_REQUIRED,-Exception</prop>
+        <prop key="import*">PROPAGATION_REQUIRED,-Exception</prop>
+        <prop key="log*">PROPAGATION_REQUIRED,-Exception</prop>
+        <prop key="apply*">PROPAGATION_NESTED,-Exception</prop>
+        <prop key="onMessage">PROPAGATION_REQUIRED,-Exception</prop>
+        <prop key="*">PROPAGATION_SUPPORTS,readOnly,-Exception</prop>
+      </props>
+    </property>
+  </bean>
+
+  <bean id="transactionInterceptor" class="org.springframework.transaction.interceptor.TransactionInterceptor">
+    <property name="transactionManager" ref="transactionManager" />
+    <property name="transactionAttributeSource" ref="transactionAttributes" />
+  </bean>
+
+  <!-- 针对类名，使用代理模式控制事务，全局有效 -->
+  <bean id="proxyFactory" class="org.springframework.aop.framework.autoproxy.BeanNameAutoProxyCreator">
+    <property name="interceptorNames">
+      <list>
+        <value>transactionInterceptor</value>
+      </list>
+    </property>
+    <property name="beanNames">
+      <list>
+        <value>*ServiceImpl</value>
+        <value>*Receiver</value>
+        <value>*Mapper</value>
+        <value>*Timer</value>
+        <value>*Controller</value>
+      </list>
+    </property>
+  </bean>
     
 </beans>

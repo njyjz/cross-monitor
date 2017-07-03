@@ -1,9 +1,11 @@
-package com.yjz.cross.monitor.service;
+package com.yjz.cross.monitor.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicBoolean;
+
+import javax.annotation.Resource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,6 +14,8 @@ import org.springframework.stereotype.Service;
 import com.yjz.cross.codec.RpcDecoder;
 import com.yjz.cross.codec.RpcEncoder;
 import com.yjz.cross.codec.RpcResponse;
+import com.yjz.cross.monitor.dao.AccessLogDataMapper;
+import com.yjz.cross.monitor.model.AccessLogData;
 import com.yjz.cross.monitor.pojo.AccessLog;
 import com.yjz.cross.monitor.pojo.CrossReference;
 import com.yjz.cross.monitor.pojo.CrossReferenceNode;
@@ -22,6 +26,7 @@ import com.yjz.cross.monitor.pojo.QueryCrossServiceReq;
 import com.yjz.cross.monitor.pojo.ServiceNodeStatus;
 import com.yjz.cross.monitor.registry.Registry;
 import com.yjz.cross.monitor.registry.RegistryFactory;
+import com.yjz.cross.monitor.service.CrossManage;
 
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.ChannelFuture;
@@ -38,7 +43,7 @@ import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 /**
  * 
  * @ClassName CrossServiceManageImpl
- * @Description 
+ * @Description
  * @author biw
  * @Date Jun 12, 2017 9:16:39 AM
  * @version 1.0.0
@@ -48,6 +53,11 @@ public class CrossManageImpl implements CrossManage
 {
     private static final Logger logger = LoggerFactory.getLogger(CrossManageImpl.class);
     
+    private static final Integer Integer = null;
+    
+    @Resource
+    private AccessLogDataMapper accessLogDataMapper;
+    
     @Override
     public List<CrossService> queryCrossServices(QueryCrossServiceReq req)
     {
@@ -55,7 +65,7 @@ public class CrossManageImpl implements CrossManage
         List<CrossService> CrossServiceList = new ArrayList<>();
         
         List<String> serviceList = null;
-        if(req.getCrossServiceName() == null)
+        if (req.getCrossServiceName() == null)
         {
             serviceList = registry.queryAllSerivceNodes();
         }
@@ -65,33 +75,31 @@ public class CrossManageImpl implements CrossManage
             serviceList.add(req.getCrossServiceName());
         }
         
-        for(String serviceName : serviceList)
-        { 
+        for (String serviceName : serviceList)
+        {
             List<String> serviceAddrList = registry.querySerivceNodes(serviceName);
-            if(serviceAddrList.isEmpty())
+            if (serviceAddrList.isEmpty())
             {
                 continue;
             }
             
-            List<CrossServiceNode> nodeList = new ArrayList<>();   
+            List<CrossServiceNode> nodeList = new ArrayList<>();
             for (String addr : serviceAddrList)
             {
                 CrossServiceNode node = new CrossServiceNode(serviceName, addr);
                 nodeList.add(node);
                 
-                List<String> referenceAddrList =
-                    registry.queryClientsUnderServer(serviceName, addr);
-                List<CrossReferenceNode> referNodeList =
-                    convReferenceAddrToNode(serviceName, referenceAddrList);
+                List<String> referenceAddrList = registry.queryClientsUnderServer(serviceName, addr);
+                List<CrossReferenceNode> referNodeList = convReferenceAddrToNode(serviceName, referenceAddrList);
                 node.setReferenceNodeList(referNodeList);
             }
-
+            
             CrossService crossService = new CrossService();
-            crossService.setServiceName(serviceName);   
+            crossService.setServiceName(serviceName);
             crossService.setNodeList(nodeList);
             CrossServiceList.add(crossService);
         }
-
+        
         return CrossServiceList;
     }
     
@@ -114,7 +122,7 @@ public class CrossManageImpl implements CrossManage
         List<CrossReference> referenceList = new ArrayList<>();
         
         List<String> referNameList = null;
-        if(req.getCrossReferenceName() != null)
+        if (req.getCrossReferenceName() != null)
         {
             referNameList = registry.queryAllReferenceNodes();
         }
@@ -124,18 +132,18 @@ public class CrossManageImpl implements CrossManage
             referNameList.add(req.getCrossReferenceName());
         }
         
-        for(String referName : referNameList)
+        for (String referName : referNameList)
         {
             List<String> clientAddrList = registry.queryClientNodes(referName);
             List<CrossReferenceNode> referNodeList = convReferenceAddrToNode(referName, clientAddrList);
-            for(CrossReferenceNode referNode : referNodeList)
+            for (CrossReferenceNode referNode : referNodeList)
             {
                 List<String> serviceAddrList = registry.queryServersUnderClient(referName, referNode.getAddress());
-                if(serviceAddrList != null && !serviceAddrList.isEmpty())
+                if (serviceAddrList != null && !serviceAddrList.isEmpty())
                 {
                     CrossServiceNode serviceNode = new CrossServiceNode(referName, serviceAddrList.get(0));
                     referNode.setServiceNode(serviceNode);
-                }      
+                }
             }
             
             CrossReference crossReference = new CrossReference();
@@ -150,8 +158,35 @@ public class CrossManageImpl implements CrossManage
     @Override
     public List<AccessLog> queryAccessRecord(String serverAddress, String clientAddress)
     {
-        // TODO 
-        return new ArrayList<>();
+        
+        try
+        {
+            List<AccessLogData> accessLogDataList =
+                accessLogDataMapper.selectByServerClientAddrees(serverAddress, clientAddress);
+            if (null != accessLogDataList)
+            {
+                List<AccessLog> accessLogList = new ArrayList<AccessLog>();
+                AccessLog accessLog = null;
+                for (AccessLogData accessLogData : accessLogDataList)
+                {
+                    accessLog.setRequestId(accessLogData.getRequestId());
+                    accessLog.setServerAddress(accessLogData.getServerAddress());
+                    accessLog.setClientAddress(accessLogData.getClientAddress());
+                    accessLog.setReqJson(accessLogData.getReqJson());
+                    accessLog.setRespJson(accessLogData.getRespJson());
+                    accessLog.setCostTimeMills(accessLogData.getCostTimeMills());
+                    accessLogList.add(accessLog);
+                }
+                return accessLogList;
+            }
+        }
+        catch (Exception e)
+        {
+            logger.error(e.getMessage(), e);
+            
+        }
+        
+        return new ArrayList<AccessLog>();
     }
     
     @Override
@@ -184,10 +219,10 @@ public class CrossManageImpl implements CrossManage
                         cp.addLast(new RpcEncoder());
                         cp.addLast(new LengthFieldBasedFrameDecoder(Integer.MAX_VALUE, 0, 4, 0, 0));
                         cp.addLast(new RpcDecoder(RpcResponse.class));
-                        //cp.addLast(new ClientHandler());
+                        // cp.addLast(new ClientHandler());
                     }
                 });
-                
+            
             // Start the client.
             String[] args = serverAddr.split(":");
             System.out.println("'netty connect to " + args[0] + ":" + args[1]);
@@ -209,7 +244,7 @@ public class CrossManageImpl implements CrossManage
                         logger.error("Failed connect to remote server. remote peer = " + serverAddr);
                         connected.set(false);
                     }
-
+                    
                     latch.countDown();
                 }
             });
@@ -231,9 +266,7 @@ public class CrossManageImpl implements CrossManage
         {
             group.shutdownGracefully();
         }
-
+        
     }
-    
-    
     
 }
