@@ -103,10 +103,4 @@ public class CrossManageController
         return crossManage.queryAccessRecord(serverAddress, clientAddress);
     }
     
-    @RequestMapping("/insert.do")
-    @ResponseBody
-    public int insert(AccessLog accessLog)
-    {
-        return accessLogService.insert(accessLog);
-    }
 }
